@@ -1,25 +1,102 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forever Counter</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; }
-    #counter { font-size: 5rem; font-variant-numeric: tabular-nums; }
+    :root {
+      --bg-color: #f4f6f8;
+      --primary-color: #1e88e5;
+      --card-color: #ffffff;
+      --text-color: #333333;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 2rem 3rem;
+      background-color: var(--card-color);
+      border-radius: 1rem;
+      box-shadow: var(--shadow);
+      max-width: 90vw;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--primary-color);
+    }
+
+    #counter {
+      font-size: 4rem;
+      font-weight: bold;
+      font-variant-numeric: tabular-nums;
+      color: var(--primary-color);
+      transition: all 0.3s ease;
+      word-break: break-word;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      #counter {
+        font-size: 3rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Forever Counter</h1>
-  <div id="counter">...</div>
+  <div class="container">
+    <h1>Forever Counter</h1>
+    <div id="counter">...</div>
+  </div>
 
   <script>
     async function getCount() {
-      const res = await fetch('/count');
-      const text = await res.text();
-      const num = Number(text);
-
-      const formatted = num.toLocaleString('id-ID');
-      document.getElementById('counter').textContent = formatted;
+      try {
+        const res = await fetch('/count');
+        const text = await res.text();
+        const num = Number(text);
+        const formatted = num.toLocaleString('id-ID');
+        document.getElementById('counter').textContent = formatted;
+      } catch (err) {
+        document.getElementById('counter').textContent = '⚠️ Error';
+      }
     }
 
     getCount();
