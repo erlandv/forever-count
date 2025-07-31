@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Forever Counter</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    #counter { font-size: 5rem; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+  <h1>Forever Counter</h1>
+  <div id="counter">...</div>
+
+  <script>
+    async function getCount() {
+      const res = await fetch('/count');
+      const text = await res.text();
+      const num = Number(text);
+
+      const formatted = num.toLocaleString('id-ID');
+      document.getElementById('counter').textContent = formatted;
+    }
+
+    getCount();
+    setInterval(getCount, 500);
+  </script>
+</body>
+</html>
