@@ -4,13 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forever Counter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #f4f6f8;
-      --primary-color: #1e88e5;
-      --card-color: #ffffff;
-      --text-color: #333333;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      --bg-gradient-1: #0f0c29;
+      --bg-gradient-2: #302b63;
+      --bg-gradient-3: #24243e;
+      --primary-color: #00f2fe;
+      --secondary-color: #4facfe;
+      --card-color: rgba(15, 23, 42, 0.8);
+      --text-color: #e2e8f0;
+      --glow-color: rgba(79, 172, 254, 0.6);
     }
 
     * {
@@ -22,9 +26,10 @@
     html, body {
       height: 100%;
       width: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-color);
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3));
       color: var(--text-color);
+      overflow: hidden;
     }
 
     body {
@@ -37,32 +42,118 @@
     }
 
     .container {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1.5rem;
-      padding: 2rem 3rem;
-      background-color: var(--card-color);
-      border-radius: 1rem;
-      box-shadow: var(--shadow);
-      max-width: 90vw;
+      gap: 2rem;
+      padding: 3rem;
+      background: var(--card-color);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        transparent,
+        transparent,
+        transparent,
+        var(--glow-color)
+      );
+      transform: rotate(30deg);
+      animation: shine 6s linear infinite;
+      z-index: -1;
     }
 
     h1 {
-      font-size: 2rem;
-      color: var(--primary-color);
+      font-size: 2.5rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
     }
 
     #counter {
-      font-size: 4rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 5rem;
       font-weight: bold;
       font-variant-numeric: tabular-nums;
       color: var(--primary-color);
       transition: all 0.3s ease;
       word-break: break-word;
+      text-shadow: 0 0 10px var(--glow-color);
+      position: relative;
+      padding: 0.5rem 1.5rem;
+      border-radius: 0.5rem;
+    }
+
+    #counter::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 0.5rem;
+      border: 2px solid transparent;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    @keyframes shine {
+      0% { transform: rotate(30deg) translate(-10%, -10%); }
+      100% { transform: rotate(30deg) translate(10%, 10%); }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem;
+        max-width: 90vw;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      #counter {
+        font-size: 3.5rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -71,22 +162,44 @@
       }
 
       h1 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
       }
 
       #counter {
-        font-size: 3rem;
+        font-size: 2.5rem;
+        padding: 0.5rem 1rem;
       }
     }
   </style>
 </head>
 <body>
+  <div class="particles" id="particles-js"></div>
   <div class="container">
     <h1>Forever Counter</h1>
     <div id="counter">...</div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 60, density: { enable: true, value_area: 800 } },
+        color: { value: "#4facfe" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: { enable: true, distance: 150, color: "#4facfe", opacity: 0.2, width: 1 },
+        move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" }
+        }
+      }
+    });
+
     async function getCount() {
       try {
         const res = await fetch('/count');
